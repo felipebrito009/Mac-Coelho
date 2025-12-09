@@ -1,0 +1,16 @@
+{
+  "name": "mac-coelho-site",
+  "version": "1.0.0",
+  "description": "Site estático Mac Coelho com Netlify Functions para envio de pedidos",
+  "main": "scrip.js",
+  "scripts": {
+    "start": "live-server --port=3000",
+    "test": "echo \"no tests\""
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.4"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}

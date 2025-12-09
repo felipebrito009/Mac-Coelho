@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Mac Coelho — Lanchonete Gourmet</title>
+    <meta name="description" content="Mac Coelho — hambúrgueres artesanais, porções e milkshakes. Peça online ou visite-nos." />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+e2e2sYt6wE/8J2j8Sg1q0ZbQvQKQk5pFh5P5Zk9k=" crossorigin=""/>
+    <meta name="theme-color" content="#111111">
+  </head>
+  <body>
+
+  <header class="site-header">
+    <div class="container header-row">
+        <h1 class="brand">Mac Coelho</h1>
+        <div class="header-actions">
+            <button id="darkToggle" aria-label="Alternar modo escuro">🌙</button>
+            <button id="openCartBtn" aria-label="Abrir carrinho">🛒 <span id="cartCount">0</span></button>
+        </div>
+    </div>
+    <nav class="main-nav">
+        <a href="#home">Início</a>
+        <a href="#cardapio">Cardápio</a>
+        <a href="#delivery">Delivery</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-inner container">
+        <h2>O melhor sabor da cidade</h2>
+        <p class="lead">Hambúrgueres artesanais, porções generosas e milkshakes que fazem história.</p>
+        <a class="btn-primary" href="#cardapio">Ver Cardápio</a>
+      </div>
+    </section>
+
+    <section id="cardapio" class="section container">
+        <h2 class="section-title">Nosso Cardápio</h2>
+        <p class="section-sub">Ingredientes selecionados e receitas artesanais. Clique em "Adicionar" para montar seu pedido.</p>
+        <div id="menuGrid" class="menu-grid" aria-live="polite"></div>
+    </section>
+
+    <section id="delivery" class="section container">
+        <h2 class="section-title">Delivery</h2>
+        <p class="section-sub">Fazemos entregas na região — estimativa de 30-50 minutos. Preencha seu endereço para simular o frete.</p>
+        <form id="deliveryForm" class="form-inline">
+            <input type="text" id="address" placeholder="Seu endereço" required>
+            <button class="btn" type="submit">Simular</button>
+        </form>
+        <div id="deliveryResult" class="mt-12"></div>
+    </section>
+
+    <section id="sobre" class="section container">
+        <h2 class="section-title">Sobre Nós</h2>
+        <p>Mac Coelho nasceu da paixão por hambúrgueres bem feitos. Usamos ingredientes locais e receitas testadas para entregar sempre o melhor.</p>
+    </section>
+
+    <section id="contato" class="section container">
+        <h2 class="section-title">Contato & Localização</h2>
+        <div class="grid-2">
+            <div>
+                <p><strong>Endereço:</strong> Rua William Neumann, 355 — perto ao São Vicente</p>
+                <p><strong>Telefone:</strong> (19) 97108-0410</p>
+                <form name="contact" id="contactForm" data-netlify="true">
+                    <label>Nome<input type="text" name="name" required></label>
+                    <label>E-mail<input type="email" name="email" required></label>
+                    <label>Mensagem<textarea name="message" rows="4" required></textarea></label>
+                    <button class="btn-primary" type="submit">Enviar</button>
+                </form>
+            </div>
+            <div>
+                <div id="map" style="height:280px; border-radius:8px; overflow:hidden"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="checkout" class="section container">
+        <h2 class="section-title">Finalizar Pedido</h2>
+        <p class="section-sub">Revise seu pedido e escolha a forma de envio.</p>
+        <div class="grid-2">
+            <div>
+                <h3>Resumo do Pedido</h3>
+                <div id="checkoutSummary" style="background:var(--card);padding:12px;border-radius:8px"></div>
+            </div>
+            <div>
+                <form id="checkoutForm">
+                    <label>Nome<input type="text" id="c_name" required></label>
+                    <label>Telefone<input type="text" id="c_phone" placeholder="(19) 9xxxx-xxxx" required></label>
+                    <label>Endereço (ou escreva "Retirar")<input type="text" id="c_address" required></label>
+                    <label>Forma de pagamento
+                        <select id="c_payment">
+                            <option value="PIX">PIX</option>
+                            <option value="Cartão">Cartão</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                        </select>
+                    </label>
+                    <label>Observações<textarea id="c_notes" rows="3"></textarea></label>
+                    <div style="display:flex;gap:8px;margin-top:12px">
+                        <button type="button" id="sendWhatsApp" class="btn-primary">Enviar via WhatsApp</button>
+                        <button type="button" id="sendEmail" class="btn">Enviar por E-mail (automático)</button>
+                    </div>
+                </form>
+                <p class="mt-12" style="color:var(--muted)">O envio por WhatsApp abre o aplicativo do cliente. O envio automático por e-mail envia para a cozinha sem abrir apps (requer configuração SMTP no deploy).</p>
+            </div>
+        </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+        <p>Mac Coelho — Todos os direitos reservados © 2025</p>
+        <p>Contato: (19) 97108-0410</p>
+    </div>
+  </footer>
+
+  <!-- Carrinho Modal -->
+  <div id="cartModal" class="cart-modal" aria-hidden="true">
+      <div class="cart-panel">
+          <button id="closeCartBtn" class="cart-close" aria-label="Fechar">✕</button>
+          <h3>Seu Pedido</h3>
+          <div id="cartItems"></div>
+          <div class="cart-footer">
+              <div>Total: <strong id="cartTotal">R$ 0,00</strong></div>
+              <button id="checkoutBtn" class="btn-primary">Finalizar (ir para checkout)</button>
+          </div>
+      </div>
+      <div class="cart-backdrop"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-o9N1j8k2C1H9gk3pH2a7gq8p3x8m+Q+v+Vd6o7Gkz5o=" crossorigin=""></script>
+    <script src="assets/script.js" defer></script>
+  </body>
+  </html>
+<section id="cardapio" class="section container">
+    <h2 class="section-title">Nosso Cardápio</h2>
+    <p class="section-sub">Ingredientes selecionados e receitas artesanais. Clique em "Adicionar" para montar seu pedido.</p>
+    <div id="menuGrid" class="menu-grid" aria-live="polite"></div>
+</section>
+
+<section id="delivery" class="section container">
+    <h2 class="section-title">Delivery</h2>
+    <p class="section-sub">Fazemos entregas na região — estimativa de 30-50 minutos. Preencha seu endereço para simular o frete.</p>
+    <form id="deliveryForm" class="form-inline">
+        <input type="text" id="address" placeholder="Seu endereço" required>
+        <button class="btn" type="submit">Simular</button>
+    </form>
+    <div id="deliveryResult" class="mt-12"></div>
+</section>
+
+<section id="sobre" class="section container">
+    <h2 class="section-title">Sobre Nós</h2>
+    <p>Mac Coelho nasceu da paixão por hambúrgueres bem feitos. Usamos ingredientes locais e receitas testadas para entregar sempre o melhor.</p>
+</section>
+
+    <section id="contato" class="section container">
+    <h2 class="section-title">Contato & Localização</h2>
+    <div class="grid-2">
+        <div>
+            <p><strong>Endereço:</strong> Rua William Neumann, 355 — perto ao São Vicente</p>
+            <p><strong>Telefone:</strong> (19) 97108-0410</p>
+            <form name="contact" id="contactForm" data-netlify="true">
+                <label>Nome<input type="text" name="name" required></label>
+                <label>E-mail<input type="email" name="email" required></label>
+                <label>Mensagem<textarea name="message" rows="4" required></textarea></label>
+                <button class="btn-primary" type="submit">Enviar</button>
+            </form>
+        </div>
+        <div>
+            <div id="map" style="height:280px; border-radius:8px; overflow:hidden"></div>
+        </div>
+    </div>
+</section>
+
+    <section id="checkout" class="section container">
+        <h2 class="section-title">Finalizar Pedido</h2>
+        <p class="section-sub">Revise seu pedido e escolha a forma de envio.</p>
+        <div class="grid-2">
+            <div>
+                <h3>Resumo do Pedido</h3>
+                <div id="checkoutSummary" style="background:var(--card);padding:12px;border-radius:8px"></div>
+            </div>
+            <div>
+                <form id="checkoutForm">
+                    <label>Nome<input type="text" id="c_name" required></label>
+                    <label>Telefone<input type="text" id="c_phone" placeholder="(19) 9xxxx-xxxx" required></label>
+                    <label>Endereço (ou escreva "Retirar")<input type="text" id="c_address" required></label>
+                    <label>Forma de pagamento
+                        <select id="c_payment">
+                            <option value="PIX">PIX</option>
+                            <option value="Cartão">Cartão</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                        </select>
+                    </label>
+                    <label>Observações<textarea id="c_notes" rows="3"></textarea></label>
+                    <div style="display:flex;gap:8px;margin-top:12px">
+                        <button type="button" id="sendWhatsApp" class="btn-primary">Enviar via WhatsApp</button>
+                        <button type="button" id="sendEmail" class="btn">Enviar por E-mail</button>
+                    </div>
+                </form>
+                <p class="mt-12" style="color:var(--muted)">O envio por WhatsApp abre o aplicativo do cliente. O envio por e-mail abre o cliente de e-mail do usuário. Para envio automático (sem abrir o app), solicite integração de backend/serverless.</p>
+            </div>
+        </div>
+    </section>
